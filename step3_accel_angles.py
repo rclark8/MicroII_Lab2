@@ -85,10 +85,10 @@ def parse_args() -> argparse.Namespace:
 # =============================================================================
 
 def accel_angles(ax: float, ay: float, az: float) -> tuple:
-    roll = atan2(ay, ax)
-    pitch = atan2(-ax, sqrt(ay ** 2 + az ** 2))
+    roll_deg = math.degrees(math.atan2(ay, ax))
+    pitch_deg = math.degrees(math.atan2(-ax, sqrt(ay ** 2 + az ** 2)))
 
-    # return math.atan2() and math.degrees()
+    return roll_deg, pitch_deg
     
     """
     Compute roll and pitch from accelerometer readings.
