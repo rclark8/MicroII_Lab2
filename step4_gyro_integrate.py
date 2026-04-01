@@ -59,7 +59,8 @@ for _backend in (["MacOSX"] if _sys.platform == "darwin" else []) + ["Qt5Agg", "
 
 # ─── Constants ────────────────────────────────────────────────────────────────
 BUFFER_SIZE: int = 200            # ~4 seconds at 50 Hz
-ANGLE_YLIM: tuple = (-90.0, 90.0) # degrees
+ACCEL_YLIM: tuple = (-90.0, 90.0) # degrees
+GYRO_YLIM: tuple = (-360.0, 360.0) # degrees
 ANIMATION_INTERVAL_MS: int = 40
 PRINT_EVERY_N: int = 10           # terminal print frequency
 
@@ -160,18 +161,9 @@ class GyroIntegrator:
         if dt <= 0:
             return self.roll, self.pitch
 
-        # ── TODO ──────────────────────────────────────────────────────────
-        # Integrate angular velocity to update the angle estimates.
-        #
-        # The gyroscope gives angular velocity in °/s.  Multiplying by the
-        # elapsed time dt (seconds) gives the change in angle:
-        #
-        #   angle(t) = angle(t-1) + angular_velocity * dt
-        #
-        # Apply this to both self.roll (using gx) and self.pitch (using gy).
-        # Then return (self.roll, self.pitch).
-        # ──────────────────────────────────────────────────────────────────
-        raise NotImplementedError("TODO Step 4: implement gyro integration")
+        self.roll += gx * dt
+        self.pitch += gy * dt
+        return self.roll, self.pitch
 
 
 # =============================================================================
@@ -251,7 +243,7 @@ def setup_figure():
     Returns:
         fig and the four line artists (accel_roll, accel_pitch, gyro_roll, gyro_pitch).
     """
-    fig, (ax_left, ax_right) = plt.subplots(1, 2, figsize=(14, 5), sharey=True)
+    fig, (ax_left, ax_right) = plt.subplots(1, 2, figsize=(14, 5), sharey=False)
     fig.suptitle(
         "Step 4 — Accelerometer Angles vs. Gyroscope Integration",
         fontsize=13, fontweight="bold",
@@ -260,11 +252,12 @@ def setup_figure():
     for ax, title in [(ax_left, "Accelerometer Angles"), (ax_right, "Gyro-Integrated Angles")]:
         ax.set_title(title)
         ax.set_xlabel("Samples (newest on right)")
-        ax.set_ylim(*ANGLE_YLIM)
         ax.set_xlim(0, BUFFER_SIZE)
         ax.grid(True, linestyle="--", alpha=0.5)
         ax.axhline(0, color="black", linewidth=0.5)
 
+    ax_left.set_ylim(*ACCEL_YLIM)
+    ax_right.set_ylim(*GYRO_YLIM)
     ax_left.set_ylabel("Angle (°)")
 
     line_ar, = ax_left.plot([], [], color="tab:red",   label="Roll",  linewidth=1.5)
