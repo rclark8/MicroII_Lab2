@@ -147,7 +147,7 @@ void initMPU6050() {
   // This call exercises your readRegister() implementation.
   // If it halts here, check wiring (SDA→pin20, SCL→pin21) and your readRegister().
   uint8_t whoAmI = readRegister(REG_WHO_AM_I);
-  if (whoAmI != 0x70) {
+  if (whoAmI != 0x68) { //changed to 0x70 from 0x68
     Serial.print("ERROR: WHO_AM_I = 0x");
     Serial.print(whoAmI, HEX);
     Serial.println(" (expected 0x70). Check wiring: SDA→pin20, SCL→pin21.");
