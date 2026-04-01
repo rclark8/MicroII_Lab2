@@ -31,7 +31,7 @@ Choosing ALPHA:
 
 Student exercise: Try ALPHA = 0.80, 0.95, 0.98, 0.999. Observe the trade-off
 between responsiveness and drift correction. 
-Lab report note: compare how changing ALPHA affects drift, noise, and responsiveness.
+TODO: Describe your observation in your lab report. 
 
 Usage:
     python step5_comp_filter.py                    # auto-detect port
@@ -67,8 +67,7 @@ ALPHA: float = 0.98              # complementary filter coefficient [0, 1]
 
 # ─── Display Constants ────────────────────────────────────────────────────────
 BUFFER_SIZE: int = 200            # ~4 seconds at 50 Hz
-ACCEL_YLIM: tuple = (-90.0, 90.0) # degrees
-GYRO_YLIM: tuple = (-360.0, 360.0) # degrees
+ANGLE_YLIM: tuple = (-90.0, 90.0) # degrees
 ANIMATION_INTERVAL_MS: int = 40
 PRINT_EVERY_N: int = 10
 
@@ -278,7 +277,7 @@ def setup_figure():
     Returns:
         fig and a tuple of six line artists.
     """
-    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(18, 5), sharey=False)
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(18, 5), sharey=True)
     fig.suptitle(
         f"Step 5 — Complementary Filter (ALPHA = {ALPHA})",
         fontsize=13, fontweight="bold",
@@ -294,15 +293,12 @@ def setup_figure():
     for i, (ax, title, c_roll, c_pitch) in enumerate(panels):
         ax.set_title(title)
         ax.set_xlabel("Samples")
+        ax.set_ylim(*ANGLE_YLIM)
         ax.set_xlim(0, BUFFER_SIZE)
         ax.grid(True, linestyle="--", alpha=0.5)
         ax.axhline(0, color="black", linewidth=0.5)
         if i == 0:
             ax.set_ylabel("Angle (°)")
-        if i == 1:
-            ax.set_ylim(*GYRO_YLIM)
-        else:
-            ax.set_ylim(*ACCEL_YLIM)
         lr, = ax.plot([], [], color=c_roll,  label="Roll",  linewidth=1.5)
         lp, = ax.plot([], [], color=c_pitch, label="Pitch", linewidth=1.5)
         ax.legend(loc="upper right", fontsize=9)
