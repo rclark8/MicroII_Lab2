@@ -160,18 +160,9 @@ class GyroIntegrator:
         if dt <= 0:
             return self.roll, self.pitch
 
-        # ── TODO ──────────────────────────────────────────────────────────
-        # Integrate angular velocity to update the angle estimates.
-        #
-        # The gyroscope gives angular velocity in °/s.  Multiplying by the
-        # elapsed time dt (seconds) gives the change in angle:
-        #
-        #   angle(t) = angle(t-1) + angular_velocity * dt
-        #
-        # Apply this to both self.roll (using gx) and self.pitch (using gy).
-        # Then return (self.roll, self.pitch).
-        # ──────────────────────────────────────────────────────────────────
-        raise NotImplementedError("TODO Step 4: implement gyro integration")
+        self.roll += gx * dt
+        self.pitch += gy * dt
+        return self.roll, self.pitch
 
 
 # =============================================================================

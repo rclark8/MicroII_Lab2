@@ -85,11 +85,6 @@ def parse_args() -> argparse.Namespace:
 # =============================================================================
 
 def accel_angles(ax: float, ay: float, az: float) -> tuple:
-    roll_deg = math.degrees(math.atan2(ay, ax))
-    pitch_deg = math.degrees(math.atan2(-ax, math.sqrt(ay ** 2 + az ** 2)))
-
-    return roll_deg, pitch_deg
-    
     """
     Compute roll and pitch from accelerometer readings.
 
@@ -105,19 +100,9 @@ def accel_angles(ax: float, ay: float, az: float) -> tuple:
         (roll_deg, pitch_deg) in degrees, range ≈ (-180, 180) for roll,
         (-90, 90) for pitch.
     """
-    # ── TODO ──────────────────────────────────────────────────────────────
-    # Compute roll and pitch in degrees from the accelerometer readings.
-    #
-    # When the board is stationary, the accelerometer measures Earth's gravity
-    # vector.  The angle that vector makes with each body axis tells us the
-    # board's orientation:
-    #
-    #   roll  = atan2(ay, az)
-    #   pitch = atan2(-ax, sqrt(ay² + az²))
-    #
-    # Use math.atan2() and math.degrees() to return values in degrees.
-    # ──────────────────────────────────────────────────────────────────────
-    raise NotImplementedError("TODO Step 3: implement accel_angles()")
+    roll_deg = math.degrees(math.atan2(ay, az))
+    pitch_deg = math.degrees(math.atan2(-ax, math.sqrt(ay ** 2 + az ** 2)))
+    return roll_deg, pitch_deg
 
 
 # =============================================================================
